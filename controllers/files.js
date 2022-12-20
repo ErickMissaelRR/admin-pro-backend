@@ -1,5 +1,6 @@
 const { response } = require("express");
 const { v4: uuidv4 } = require('uuid');
+const { updateImage } = require("../helpers/updateImage");
 // const path = require('path');
 
 
@@ -55,6 +56,9 @@ const fileUpload = (req, res = response) => {
             msg: "Error inesperado, favor de ccomunicarse con el administrador"
         });
     }
+
+    //Actualizar base de datos
+    updateImage( type, id, fileName );
 
     res.status(200).json({
         ok: true,
