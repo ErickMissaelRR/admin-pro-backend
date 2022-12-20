@@ -7,21 +7,26 @@ const cors = require('cors')
 // crear el servidor de express
 const app = express();
 
-//Base de datos
-dbConnection();
-
 //Cors
 app.use( cors() )
 
+// Lectura y parseo del body
+app.use( express.json() )
+
+//Base de datos
+dbConnection();
+
 // rutas
-app.get( '/', (req, res) => {
+app.use( '/api/users', require('./routes/user') );
+app.use( '/api/login', require('./routes/auth') );
 
-    res.json({
-        ok: true,
-        msg: 'Hola mundo'
-    })
 
-});
+
+
+
+
+
+
 
 
 app.listen( process.env.PORT, () => {
