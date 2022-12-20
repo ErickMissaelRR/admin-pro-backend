@@ -75,8 +75,6 @@ const getImage = (req, res = response) => {
   const type = req.params.table;
   const image = req.params.image;
 
-  console.log(type, image);
-
   const pathImage = path.join( __dirname, `../uploads/${ type }/${ image }` );
 
   //Imagen por defecto
