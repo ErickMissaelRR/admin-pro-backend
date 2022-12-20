@@ -20,6 +20,8 @@ dbConnection();
 app.use( '/api/users', require('./routes/user') );
 app.use( '/api/hospitals', require('./routes/hospitals') );
 app.use( '/api/medics', require('./routes/medics') );
+app.use( '/api/search', require('./routes/general-search') );
+app.use( '/api/files', require('./routes/files') );
 app.use( '/api/login', require('./routes/auth') );
 
 
