@@ -18,6 +18,8 @@ dbConnection();
 
 // rutas
 app.use( '/api/users', require('./routes/user') );
+app.use( '/api/hospitals', require('./routes/hospitals') );
+app.use( '/api/medics', require('./routes/medics') );
 app.use( '/api/login', require('./routes/auth') );
 
 
