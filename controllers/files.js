@@ -71,7 +71,6 @@ const fileUpload = (req, res = response) => {
 
 const getImage = (req, res = response) => {
 
-  console.log(req);
   const type = req.params.table;
   const image = req.params.image;
 

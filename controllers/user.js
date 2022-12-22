@@ -2,6 +2,7 @@ const { response } = require('express');
 const User = require("../models/user");
 const bcryptjs = require('bcryptjs');
 const { generateJWT } = require('../helpers/JWT');
+const user = require('../models/user');
 
 const getUsers = async (req, res) => {
 
@@ -93,8 +94,15 @@ const updateUser = async (req, res = response) => {
 
     }
 
-    //Actualizar data
-    fields.email = email;
+    if(!userExist.google){
+      //Actualizar data
+      fields.email = email;
+    }else if(userExist.email !== email){
+      return res.status(400).json({
+        ok: false,
+        msg: 'Usuarios de google no pueden cambiar su correo'
+      })
+    }
 
     const userUpdated = await User.findByIdAndUpdate( uid, fields, { new: true } );
 
