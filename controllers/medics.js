@@ -98,9 +98,39 @@ const deleteMedic = async(req, res = response) => {
     }
 };
 
+const getMedicById = async(req, res = response) => {
+  const medicId = req.params.id
+
+  try {
+
+      const medicDB = await Medic.findById(medicId);
+
+      if( !medicDB ){
+
+          res.status(404).json({
+              ok: true,
+              msg: 'Médico no encontrado por id'
+          })   
+      }
+
+      await Medic.findById(medicId);
+
+      res.json({
+          ok: true,
+          medic: medicDB
+      })
+  } catch (error) {
+      res.status(500).json({
+          ok: false,
+          msg: "Error inesperado, favor de comunicarse con el administrador"
+      })
+  }
+};
+
 module.exports = {
   getMedics,
   createMedic,
   updateMedic,
   deleteMedic,
+  getMedicById
 };
