@@ -42,15 +42,14 @@ const getAllByCollection = async (req, res = response) => {
 
   switch (table) {
     case "medicos":
-        data = await Medic.find({ name: regex });
+        data = await Medic.find({ name: regex }).populate("user", "name img")
+        .populate("hospital", "name img");
       break;
     case "hospitales":
         data = await Hospital.find({ name: regex }).populate("user", "name img");
       break;
     case "usuarios":
         data = await Users.find({ name: regex })
-        .populate("user", "name img")
-        .populate("hospital", "name img");
       break;
 
     default:
