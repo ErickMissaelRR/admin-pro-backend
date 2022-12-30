@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 
 const validateJWT = ( req, res, next ) => {
@@ -29,6 +30,79 @@ const validateJWT = ( req, res, next ) => {
     }
 }
 
+const validateRole = async (req, res, next) => {
+
+    const uid = req.uid
+
+    try {
+
+        const userDB = await user.findById(uid);
+
+        if( !userDB ){
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se ha encontrado un usuario con ese id'
+            })
+        }
+
+        if( userDB.role !== 'ADMIN_ROLE' ){
+            return res.status(403).json({
+                ok: false,
+                msg: 'No cuenta con los permisos necesarios'
+            })
+        }
+
+        next();
+        
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado, favor de ccomunicarse con el administrador'
+        })
+    }
+
+}
+
+const validateSameUser = async (req, res, next) => {
+
+    const id = req.params.id;
+    const uid = req.uid;
+
+    try {
+
+        const userDB = await user.findById(uid);
+
+        if( !userDB ){
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se ha encontrado un usuario con ese id'
+            })
+        }
+
+        if( userDB.role === 'ADMIN_ROLE' || id === uid){
+            next();
+        } else {
+            return res.status(403).json({
+                ok: false,
+                msg: 'No cuenta con los permisos necesarios'
+            })
+        }
+        
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado, favor de ccomunicarse con el administrador'
+        })
+    }
+
+}
+
 module.exports = {
-    validateJWT
+    validateJWT,
+    validateRole,
+    validateSameUser
 }

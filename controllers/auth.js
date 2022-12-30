@@ -3,6 +3,7 @@ const User = require("../models/user");
 const  bcryptjs = require("bcryptjs");
 const { generateJWT } = require("../helpers/JWT");
 const { googleVerify } = require("../helpers/google-verify");
+const { sidebarMenu } = require("../helpers/sidebar-menu")
 
 
 const login = async (req, res = response) => {
@@ -16,7 +17,7 @@ const login = async (req, res = response) => {
         const validPassword = bcryptjs.compareSync(password, userDB.password);
 
         if( !userDB || !validPassword){
-            return res.status(404).json({
+            return res.status(400).json({
                 ok: false,
                 msg: 'La contraseña y/o el email no existen'
             })
@@ -39,7 +40,8 @@ const login = async (req, res = response) => {
 
         res.status(200).json({
             ok: true,
-            token
+            token,
+            menu: sidebarMenu(userDB.role)
         })
     } catch (error) {
         res.status(500).json({
@@ -84,13 +86,14 @@ const googleSignIn = async (req, res = response) => {
                 name, 
                 picture,
                 token
-            }
+            },
+            menu: sidebarMenu(user.role)
         })
 
     } catch (error) {
         console.log(error);
         res.status(400).json({
-            ok:true,
+            ok: false,
             msg: 'Token de google invalido'
         })
     }
@@ -120,7 +123,8 @@ const refreshToken = async(req, res = response) => {
             role,
             img,
             google
-        }
+        },
+        menu: sidebarMenu(role)
     })
 
         if( !userDB ){

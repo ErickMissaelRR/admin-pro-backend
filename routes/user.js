@@ -6,7 +6,7 @@ const { Router } = require('express');
 const { getUsers, createUser, updateUser, deleteUser } = require('../controllers/user');
 const { check } = require('express-validator')
 const { validateFields } = require('../middlewares/validate-fields');
-const { validateJWT } = require('../middlewares/validate-jwt');
+const { validateJWT, validateRole, validateSameUser } = require('../middlewares/validate-jwt');
 
 const router = Router();
 
@@ -21,11 +21,12 @@ router.post( '/' , [
 
 router.put( '/:id' , [
     validateJWT,
+    validateSameUser,
     check('name', 'El usuario es requerido').not().isEmpty(),
     check('role', 'El rol es requerid0').not().isEmpty(),
     check('email', 'El email es requerido').isEmail(),
 ], updateUser);
 
-router.delete('/:id', validateJWT, deleteUser)
+router.delete('/:id', [validateJWT, validateRole], deleteUser)
 
 module.exports = router
