@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const { dbConnection } = require('./database/config');
 const cors = require('cors')
@@ -27,13 +28,10 @@ app.use( '/api/search', require('./routes/general-search') );
 app.use( '/api/files', require('./routes/files') );
 app.use( '/api/login', require('./routes/auth') );
 
-
-
-
-
-
-
-
+//SPA
+app.get('*', ( req, res) => {
+    res.sendFile( path.resolve(__dirname, 'public/index.html'));
+})
 
 
 app.listen( process.env.PORT, () => {
